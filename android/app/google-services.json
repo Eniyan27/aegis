@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "977661298541",
+    "firebase_url": "https://aegis-fbe56.firebaseio.com",
+    "project_id": "aegis-fbe56",
+    "storage_bucket": "aegis-fbe56.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:977661298541:android:f55412391f79f33052bc64",
+        "android_client_info": {
+          "package_name": "com.aegisrn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "977661298541-9badn5reg7loouepc0j9d45n20pebg9v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFf5IQrC52BLpopaVZf4keLD1-KYEMGAs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "977661298541-9badn5reg7loouepc0j9d45n20pebg9v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
