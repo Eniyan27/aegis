@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
-import {Button, StyleSheet, TextInput} from 'react-native';
+import {Button, TextInput} from 'react-native';
 import {Input} from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import {useNavigation} from '@react-navigation/native';
 
-export default function PhoneSignIn() {
+export var CodeConfirmation;
+
+export default function PhoneSignIn({props}) {
   const navigation = useNavigation();
 
   // If null, no SMS has been sent
@@ -26,7 +28,7 @@ export default function PhoneSignIn() {
     }
   }
 
-  const CodeConfirmation = () => {
+  CodeConfirmation = () => {
     return (
       <>
         <TextInput value={code} onChangeText={(text) => setCode(text)} />
@@ -46,18 +48,11 @@ export default function PhoneSignIn() {
         <Button
           title="Send Code"
           onPress={() => {
-            signInWithPhoneNumber(number);
-            navigation.navigate('Confirm Code');
+            signInWithPhoneNumber(props);
+            // navigation.navigate('Confirm Code');
           }}
         />
       </>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-});

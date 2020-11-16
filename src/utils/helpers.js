@@ -1,4 +1,5 @@
 import auth from '@react-native-firebase/auth';
+import firebase from '@react-native-firebase/app';
 import {LoginManager, AccessToken} from 'react-native-fbsdk';
 import {GoogleSignin} from '@react-native-community/google-signin';
 async function loginWithFB() {
@@ -40,12 +41,35 @@ async function loginWithGoogle() {
 }
 
 const loggedIn = () => {
-  console.log(auth().currentUser);
-  if (auth().currentUser == null) {
-    return true;
+  var user = firebase.auth().currentUser;
+  if (user) {
+    console.log(`The user : ${user}`);
+    return {
+      user: user.displayName,
+    };
   } else {
-    return false;
+    return null;
   }
 };
 
-export {loginWithFB, loginWithGoogle, loggedIn};
+const isLoggedIn = () => {
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+};
+
+const signOut = () => {
+  firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      console.log('Signed out');
+    })
+    .catch((err) => console.error(err));
+};
+
+export {loginWithFB, loginWithGoogle, loggedIn, signOut, isLoggedIn};

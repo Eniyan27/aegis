@@ -1,9 +1,20 @@
-import React from 'react';
-import {View, StyleSheet, Button} from 'react-native';
-import {GoogleSignin} from '@react-native-community/google-signin';
-import {loginWithFB, loginWithGoogle} from '../utils/helpers';
+import React, {useState} from 'react';
+import {View, StyleSheet, Button, Text} from 'react-native';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+} from '@react-native-community/google-signin';
+import {
+  loginWithFB,
+  loginWithGoogle,
+  signOut,
+  loggedIn,
+} from '../utils/helpers';
+import {LoginButton} from 'react-native-fbsdk';
 import {useNavigation} from '@react-navigation/native';
+
 function LoginComps() {
+  const [user, setuser] = useState(null);
   const navigation = useNavigation();
   GoogleSignin.configure({
     webClientId:
@@ -12,27 +23,25 @@ function LoginComps() {
   return (
     <View style={styles.container}>
       <View style={styles.main}>
-        <Button
+        <LoginButton
           title="Login with Facebook"
           onPress={() =>
             loginWithFB()
-              .then((result) => console.log(result))
+              .then(() => {
+                navigation.navigate('Success');
+              })
               .catch((err) => console.log(err))
           }
         />
-        <Button
+        <GoogleSigninButton
           title="Login with Google"
           onPress={() =>
             loginWithGoogle()
-              .then(() => console.log('Google login success !'))
+              .then(() => {
+                navigation.navigate('Success');
+              })
               .catch((err) => console.error(err))
           }
-        />
-        <Button
-          onPress={() => {
-            navigation.navigate('Phone Number sign in');
-          }}
-          title="Phone Number sign in"
         />
       </View>
     </View>
@@ -47,7 +56,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#6A097D',
     zIndex: 1,
   },
   container: {
