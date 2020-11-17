@@ -1,10 +1,11 @@
 import {combineReducers} from 'redux';
-import {loggedIN, setContacts} from './login';
-import {nextStep, prevStep} from './step';
-
+import {loggedIN, contacts, setContacts} from './login';
+import {firebaseReducer} from 'react-redux-firebase';
+import {firestoreReducer} from 'redux-firestore';
 export const allReducers = combineReducers({
   loggedIN,
+  contacts,
   setContacts,
-  nextStep,
-  prevStep,
+  firebase: firebaseReducer,
+  firestore: firestoreReducer,
 });

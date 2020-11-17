@@ -8,8 +8,12 @@ import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import anim from '../assets/8222-success.json';
 import {createStackNavigator} from '@react-navigation/stack';
 import LottieView from 'lottie-react-native';
-import {Avatar, Button, Icon, ListItem} from 'react-native-elements';
+import {Avatar, Button, ListItem} from 'react-native-elements';
 import {ScrollView} from 'react-native-gesture-handler';
+import ChooseContacts from './ChooseContacts';
+import {hasContacts, updateContacts} from '../redux/actions';
+import {useSelector, useDispatch} from 'react-redux';
+import BLE from './BLE';
 
 const Stack = createStackNavigator();
 
@@ -24,6 +28,7 @@ function Login() {
   } else {
     return (
       <View style={styles.container}>
+        {/* {<BLE />} */}
         <Text style={styles.heading}>Getting started</Text>
         <LoginComps />
       </View>
@@ -49,8 +54,46 @@ function Success() {
   );
 }
 
+function ListContacts() {
+  const contacts = useSelector((state) => state.contacts?.contacts);
+  const dispatch = useDispatch();
+  return (
+    <ScrollView>
+      {contacts.map((contact) => (
+        <ListItem
+          key={contact.rawContactId}
+          onPress={() => dispatch(updateContacts(contact))}>
+          {contact.hasThumbnail ? (
+            <Avatar source={{uri: contact?.thumbnailPath}} />
+          ) : (
+            <Avatar
+              rounded
+              title={contact.displayName[0]}
+              activeOpacity={0.7}
+            />
+          )}
+          <ListItem.Content>
+            <ListItem.Title>{contact.displayName}</ListItem.Title>
+            <ListItem.Subtitle>
+              {contact.phoneNumbers[0]?.number}
+            </ListItem.Subtitle>
+          </ListItem.Content>
+          <ListItem.Chevron />
+        </ListItem>
+      ))}
+    </ScrollView>
+  );
+}
+
 function ContactsChooser() {
-  const [contacts, setContacts] = useState([]);
+  const dispatch = useDispatch();
+  const contacts = useSelector((state) => state.contacts?.contacts);
+  const chosenContacts = useSelector(
+    (state) => state.setContacts?.chosenContacts,
+  );
+  console.log(chosenContacts);
+
+  const [choosenContacts, setChoosenContacts] = useState([]);
   useEffect(() => {
     try {
       PermissionsAndroid.request(PERMISSIONS.ANDROID.READ_CONTACTS, {
@@ -58,27 +101,36 @@ function ContactsChooser() {
         message: 'This app would like to view your contacts.',
         buttonPositive: 'Please accept bare mortal',
       }).then(() => {
-        Contacts.getAll().then((res) => setContacts(res));
+        Contacts.getAll().then((res) => {
+          const sortedData = res.sort(
+            (a, b) => a.displayName.toLowerCase() > b.displayName.toLowerCase(),
+          );
+          dispatch(hasContacts(sortedData));
+        });
       });
     } catch (error) {
       console.log(error);
     }
   }, []);
-  return (
-    <ScrollView>
-      {contacts.map((contact) => (
-        <ListItem key={contact.rawContactId}>
-          {contact.hasThumbnail ? (
-            <Avatar source={contact.thumbnailPath} />
-          ) : (
-            <Icon name="user" type="font-awesome-5" />
-          )}
-
-          <ListItem.Title>{contact.displayName}</ListItem.Title>
-        </ListItem>
-      ))}
-    </ScrollView>
-  );
+  if (contacts.length === 0) {
+    return (
+      <View>
+        <LottieView
+          source={require('../assets/38290-loading-51-monoplane.json')}
+          loop={true}
+          autoPlay={true}
+          style={styles.success}
+        />
+      </View>
+    );
+  } else {
+    return (
+      <View>
+        <ListContacts />
+        <ChooseContacts props={chosenContacts} styles={styles.badge} />
+      </View>
+    );
+  }
 }
 
 function LoginPage() {
@@ -119,6 +171,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     display: 'flex',
     alignContent: 'center',
+  },
+  badge: {
+    elevation: 2,
+    flex: 1,
+    position: 'absolute',
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 30,
+    bottom: 30,
   },
 });
 

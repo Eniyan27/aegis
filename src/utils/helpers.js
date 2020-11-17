@@ -1,7 +1,9 @@
 import auth from '@react-native-firebase/auth';
 import firebase from '@react-native-firebase/app';
+import firestore from '@react-native-firebase/firestore';
 import {LoginManager, AccessToken} from 'react-native-fbsdk';
 import {GoogleSignin} from '@react-native-community/google-signin';
+import {getContactsMatchingString} from 'react-native-contacts';
 async function loginWithFB() {
   // Attempt login with permissions
   const result = await LoginManager.logInWithPermissions([
@@ -26,7 +28,16 @@ async function loginWithFB() {
   );
 
   // Sign-in the user with the credential
-  return auth().signInWithCredential(facebookCredential);
+  return auth()
+    .signInWithCredential(facebookCredential)
+    .then((user) => {
+      firestore().collection('users').doc(user.user.uid).set({
+        user_id: user.user.uid,
+        name: user.user.displayName,
+        mail: user.user.email,
+        contacts: [],
+      });
+    });
 }
 
 async function loginWithGoogle() {
@@ -37,7 +48,16 @@ async function loginWithGoogle() {
   const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
   // Sign-in the user with the credential
-  return auth().signInWithCredential(googleCredential);
+  return auth()
+    .signInWithCredential(googleCredential)
+    .then((user) => {
+      firestore().collection('users').doc(user.user.uid).set({
+        user_id: user.user.uid,
+        name: user.user.displayName,
+        mail: user.user.email,
+        contacts: [],
+      });
+    });
 }
 
 const loggedIn = () => {
@@ -72,4 +92,17 @@ const signOut = () => {
     .catch((err) => console.error(err));
 };
 
-export {loginWithFB, loginWithGoogle, loggedIn, signOut, isLoggedIn};
+const searchContact = (name) => {
+  getContactsMatchingString(name)
+    .then((res) => res)
+    .catch((err) => console.log(err));
+};
+
+export {
+  loginWithFB,
+  loginWithGoogle,
+  loggedIn,
+  signOut,
+  isLoggedIn,
+  searchContact,
+};

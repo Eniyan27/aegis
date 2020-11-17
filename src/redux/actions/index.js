@@ -1,4 +1,4 @@
-import {LOGGED_IN, CONTACTS, INCREMENT_STEP, DECREMENT_STEP} from '../types';
+import {LOGGED_IN, CONTACTS, SET_CONTACTS} from '../types';
 
 export const loggedIN = (uid) => {
   return {
@@ -14,16 +14,9 @@ export const hasContacts = (contacts) => {
   };
 };
 
-export const nextStep = (step) => {
+export const updateContacts = (contact) => {
   return {
-    type: INCREMENT_STEP,
-    payload: step,
-  };
-};
-
-export const prevStep = (step) => {
-  return {
-    type: DECREMENT_STEP,
-    payload: step,
+    type: SET_CONTACTS,
+    payload: contact,
   };
 };
