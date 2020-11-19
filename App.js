@@ -6,16 +6,17 @@
  * @flow strict-local
  */
 
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Provider} from 'react-redux';
 import LoginPage from './src/components/LoginPage';
 import {store} from './src/redux';
 import firebase from '@react-native-firebase/app';
+// import firestore from '@react-native-firebase/firestore';
 import {ReactReduxFirebaseProvider} from 'react-redux-firebase';
 import FirebaseApp from '@react-native-firebase/app';
 import {createFirestoreInstance} from 'redux-firestore';
 
-var firebaseConfig = {
+export var firebaseConfig = {
   apiKey: 'AIzaSyALXisGgBIp3rGrpt9dI-4kS5CqyHlM1xo',
   authDomain: 'aegis-fbe56.firebaseapp.com',
   databaseURL: 'https://aegis-fbe56.firebaseio.com',
@@ -25,11 +26,12 @@ var firebaseConfig = {
   appId: '1:977661298541:web:27a245764ff1470a52bc64',
   measurementId: 'G-136JVFHXKD',
 };
+
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-const rrfConfig = {
+export const rrfConfig = {
   userProfile: 'users',
   useFirestoreForProfile: true,
 };

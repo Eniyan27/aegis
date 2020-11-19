@@ -1,9 +1,11 @@
+import React from 'react';
 import auth from '@react-native-firebase/auth';
 import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
 import {LoginManager, AccessToken} from 'react-native-fbsdk';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import {getContactsMatchingString} from 'react-native-contacts';
+import {useFirestore} from 'react-redux-firebase';
 async function loginWithFB() {
   // Attempt login with permissions
   const result = await LoginManager.logInWithPermissions([
@@ -66,11 +68,15 @@ const loggedIn = () => {
     console.log(`The user : ${user}`);
     return {
       user: user.displayName,
+      uid: user.uid,
     };
   } else {
     return null;
   }
 };
+
+const data = loggedIn();
+console.log(data);
 
 const isLoggedIn = () => {
   firebase.auth().onAuthStateChanged((user) => {
@@ -92,17 +98,4 @@ const signOut = () => {
     .catch((err) => console.error(err));
 };
 
-const searchContact = (name) => {
-  getContactsMatchingString(name)
-    .then((res) => res)
-    .catch((err) => console.log(err));
-};
-
-export {
-  loginWithFB,
-  loginWithGoogle,
-  loggedIn,
-  signOut,
-  isLoggedIn,
-  searchContact,
-};
+export {loginWithFB, loginWithGoogle, loggedIn, signOut, isLoggedIn};
