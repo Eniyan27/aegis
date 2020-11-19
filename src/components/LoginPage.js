@@ -26,7 +26,7 @@ const client = twilio(id, key);
 function Login() {
   const dummyData = ['80720 89369', '80155 51146', '93616 29926'];
 
-  // This is a comment from Tarun !!
+  // This is a comment from ENIYAN !!
 
   const sendSMS = () => {
     Promise.all(
