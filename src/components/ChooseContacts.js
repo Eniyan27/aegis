@@ -9,10 +9,10 @@ import {
   Button,
   Text,
 } from 'react-native-elements';
-import {deleteContact, uploadContacts} from '../redux/actions';
+import {deleteContact} from '../redux/actions';
+import {firebase} from '@react-native-firebase/firestore';
 import {useDispatch, useSelector} from 'react-redux';
 import {useFirestore} from 'react-redux-firebase';
-import {loggedIN} from '../redux/actions';
 import {loggedIn} from '../utils/helpers';
 
 const ChooseContacts = ({props, styles}) => {
@@ -21,7 +21,18 @@ const ChooseContacts = ({props, styles}) => {
     setVisible(!visible);
   };
   const dispatch = useDispatch();
-  const chosenContacts = useSelector((state) => state.chosenContacts);
+  const chosenContacts = useSelector((state) => state.user.chosenContacts);
+  console.log(chosenContacts);
+  const updateContacts = async (contacts) => {
+    await firebase
+      .firestore()
+      .collection('users')
+      .doc(loggedIn().uid)
+      .update({
+        contacts: contacts,
+      })
+      .then((res) => console.log(res));
+  };
   return (
     <View style={styles}>
       <Icon
@@ -76,7 +87,9 @@ const ChooseContacts = ({props, styles}) => {
             icon={<Icon name="done" type="material" />}
             title="Finish"
             style={newStyles.modal_button}
-            onPress={() => dispatch(uploadContacts(chosenContacts))}
+            onPress={() =>
+              updateContacts(chosenContacts).then((res) => console.log(res))
+            }
           />
         )}
       </Overlay>

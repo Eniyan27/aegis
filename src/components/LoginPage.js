@@ -13,39 +13,17 @@ import {ScrollView} from 'react-native-gesture-handler';
 import ChooseContacts from './ChooseContacts';
 import {hasContacts, updateContacts} from '../redux/actions';
 import {useSelector, useDispatch} from 'react-redux';
-import twilio from 'twilio';
+import Communications from 'react-native-communications';
 
 const Stack = createStackNavigator();
 
 // Components
 
-const id = 'ACbd1787ed5e2c1f5d161ec4677d38e27d';
-const key = '32dbb73ab1efe0dd2f4e0f790dfbff9c';
-const client = twilio(id, key);
-
 function Login() {
-  const dummyData = ['80720 89369', '80155 51146', '93616 29926'];
-
-  // This is a comment from ENIYAN !!
-
-  const sendSMS = () => {
-    Promise.all(
-      dummyData.map((number) => {
-        client.messages
-          .create({
-            to: `+91 ${number}`,
-            from: '+91 99528 40983',
-            body: 'Testing SMS for Aegis 😁',
-          })
-          .then((res) => console.log('Message sent', res));
-      }),
-    );
-  };
-
-  if (!isLoggedIn()) {
+  if (isLoggedIn()) {
     return (
       <View style={styles.main}>
-        <Button title="Aegis" onPress={() => sendSMS()} />
+        <Button title="Aegis" />
       </View>
     );
   } else {
@@ -111,9 +89,9 @@ function ContactsChooser() {
   const dispatch = useDispatch();
   const contacts = useSelector((state) => state.user.contacts);
   const state = useSelector((state) => state);
-  console.log(state);
+  // console.log(state);
   const chosenContacts = useSelector((state) => state.user.chosenContacts);
-  console.log(chosenContacts);
+  // console.log(chosenContacts);
 
   const [choosenContacts, setChoosenContacts] = useState([]);
   useEffect(() => {

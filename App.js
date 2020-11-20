@@ -10,7 +10,8 @@ import React from 'react';
 import {Provider} from 'react-redux';
 import LoginPage from './src/components/LoginPage';
 import {store} from './src/redux';
-import firebase from '@react-native-firebase/app';
+// import firebase from '@react-native-firebase/app';
+import firebase from 'firebase/app';
 // import firestore from '@react-native-firebase/firestore';
 import {ReactReduxFirebaseProvider} from 'react-redux-firebase';
 import FirebaseApp from '@react-native-firebase/app';
@@ -37,7 +38,7 @@ export const rrfConfig = {
 };
 
 const rrfProps = {
-  firebase: FirebaseApp,
+  firebase,
   config: rrfConfig,
   dispatch: store.dispatch,
   createFirestoreInstance, // <- needed if using firestore
