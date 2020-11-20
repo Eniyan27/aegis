@@ -14,6 +14,7 @@ import {firebase} from '@react-native-firebase/firestore';
 import {useDispatch, useSelector} from 'react-redux';
 import {useFirestore} from 'react-redux-firebase';
 import {loggedIn} from '../utils/helpers';
+import {useNavigation} from '@react-navigation/native';
 
 const ChooseContacts = ({props, styles}) => {
   const [visible, setVisible] = useState(false);
@@ -22,16 +23,18 @@ const ChooseContacts = ({props, styles}) => {
   };
   const dispatch = useDispatch();
   const chosenContacts = useSelector((state) => state.user.chosenContacts);
-  console.log(chosenContacts);
+  const navigation = useNavigation();
   const updateContacts = async (contacts) => {
-    await firebase
-      .firestore()
-      .collection('users')
-      .doc(loggedIn().uid)
-      .update({
-        contacts: contacts,
-      })
-      .then((res) => console.log(res));
+    await contacts.map((contact) => {
+      firebase
+        .firestore()
+        .collection('users')
+        .doc(loggedIn().uid)
+        .update({
+          contacts: firebase.firestore.FieldValue.arrayUnion(contact),
+        })
+        .then((res) => console.log(res));
+    });
   };
   return (
     <View style={styles}>
@@ -87,9 +90,11 @@ const ChooseContacts = ({props, styles}) => {
             icon={<Icon name="done" type="material" />}
             title="Finish"
             style={newStyles.modal_button}
-            onPress={() =>
-              updateContacts(chosenContacts).then((res) => console.log(res))
-            }
+            onPress={() => {
+              updateContacts(chosenContacts).then((res) => console.log(res));
+              navigation.navigate('Final Page');
+              toggleVisible();
+            }}
           />
         )}
       </Overlay>

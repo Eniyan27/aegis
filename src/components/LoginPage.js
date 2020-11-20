@@ -13,17 +13,19 @@ import {ScrollView} from 'react-native-gesture-handler';
 import ChooseContacts from './ChooseContacts';
 import {hasContacts, updateContacts} from '../redux/actions';
 import {useSelector, useDispatch} from 'react-redux';
-import Communications from 'react-native-communications';
+import Allset from './Allset';
+import Locations from './Locations';
 
 const Stack = createStackNavigator();
 
 // Components
 
 function Login() {
-  if (isLoggedIn()) {
+  if (!isLoggedIn()) {
     return (
       <View style={styles.main}>
         <Button title="Aegis" />
+        <Locations />
       </View>
     );
   } else {
@@ -142,6 +144,7 @@ function LoginPage() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Choose contacts" component={ContactsChooser} />
         <Stack.Screen name="Success" component={Success} />
+        <Stack.Screen name="Final Page" component={Allset} />
       </Stack.Navigator>
     </NavigationContainer>
   );

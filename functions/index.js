@@ -41,18 +41,18 @@ const client = require('twilio')(
   'AC0be31c882934bdef820a2d24a3474009',
   '871a993fb3a2bdd7e08331fa0d3ee6f2',
 );
-const sms = async () => {
+const sms = async (contacts) => {
   const accountSid = 'AC0be31c882934bdef820a2d24a3474009';
   const authToken = '871a993fb3a2bdd7e08331fa0d3ee6f2';
-  await fetch(
-    'https://api.twilio.com/2010-04-01/Accounts/AC0be31c882934bdef820a2d24a3474009/Messages.json',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    },
-  );
+  // await fetch(
+  //   'https://api.twilio.com/2010-04-01/Accounts/AC0be31c882934bdef820a2d24a3474009/Messages.json',
+  //   {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //   },
+  // );
   client.messages
     .create({
       body: 'Hi there!',
