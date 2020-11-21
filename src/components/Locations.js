@@ -1,5 +1,7 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, PermissionsAndroid, Button} from 'react-native';
+import MapboxGL from '@react-native-mapbox-gl/maps';
+import React, {useState, useEffect, useLayoutEffect} from 'react';
+import {View, Text, PermissionsAndroid, StyleSheet} from 'react-native';
+import {Button} from 'react-native-elements';
 import Geolocation from 'react-native-geolocation-service';
 import {PERMISSIONS} from 'react-native-permissions';
 import Maps from './Maps';
@@ -11,36 +13,45 @@ const Locations = () => {
       try {
         const granted = await PermissionsAndroid.request(
           PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-          {
-            title: 'Need to access your location',
-            buttonPositive: 'Intha vachuko !',
-            buttonNegative: 'Unaku elam kedayathu',
-            buttonNeutral: 'Pona poguthu !',
-            message: 'Unga location venum',
-          },
         );
 
-        // if (granted === PermissionsAndroid.RESULTS) {
-        //   Geolocation.getCurrentPosition((info) => setLocation(info));
-        // }
+        if (granted === 'granted') {
+          Geolocation.getCurrentPosition((info) => setLocation(info));
+        }
       } catch (error) {
         console.log(error);
       }
     };
   }, [location]);
+  // useLayoutEffect(() => {
+  //   async () => {
+  //     try {
+  //       const granted = await PermissionsAndroid.request(
+  //         PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+  //       );
+
+  //       if (granted === 'granted') {
+  //         Geolocation.getCurrentPosition((info) => setLocation(info));
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  // }, [location]);
   const array = [];
   const onClick = () => {
     // Geolocation.watchPosition((position) => console.log(position));
     Geolocation.getCurrentPosition((info) => {
-      array.push(info.coords.latitude, info.coords.longitude);
+      array.push(info.coords, info.coords.longitude);
       setLocation(info);
     });
   };
+  console.log(location);
   return (
     <View>
       <Text>{JSON.stringify(location)}</Text>
-      {/* <Button title="Location" onPress={() => onClick()} /> */}
-      <Maps coordinates={array} />
+      <Button title="Location" onPress={() => onClick()} />
+      <Maps coordinates={location} />
     </View>
   );
 };
