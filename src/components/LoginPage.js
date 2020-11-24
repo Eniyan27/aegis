@@ -14,7 +14,7 @@ import ChooseContacts from './ChooseContacts';
 import {hasContacts, updateContacts} from '../redux/actions';
 import {useSelector, useDispatch} from 'react-redux';
 import Allset from './Allset';
-import Locations from './Locations';
+import Location from './Location';
 
 const Stack = createStackNavigator();
 
@@ -24,8 +24,7 @@ function Login() {
   if (!isLoggedIn()) {
     return (
       <View style={styles.main}>
-        <Button title="Aegis" />
-        <Locations />
+        <Button title="Aegis" onPress={() => Location.startService()} />
       </View>
     );
   } else {

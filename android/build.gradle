@@ -1,5 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+// @9s6cY=TL~-R>]QH
+
 buildscript {
     ext {
         buildToolsVersion = "29.0.2"
