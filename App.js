@@ -10,12 +10,13 @@ import React from 'react';
 import {Provider} from 'react-redux';
 import LoginPage from './src/components/LoginPage';
 import {store} from './src/redux';
-// import firebase from '@react-native-firebase/app';
 import firebase from 'firebase/app';
-// import firestore from '@react-native-firebase/firestore';
 import {ReactReduxFirebaseProvider} from 'react-redux-firebase';
-import FirebaseApp from '@react-native-firebase/app';
 import {createFirestoreInstance} from 'redux-firestore';
+import {AppRegistry} from 'react-native';
+import Location from './src/components/Location';
+
+AppRegistry.registerHeadlessTask('Location', () => Location);
 
 export var firebaseConfig = {
   apiKey: 'AIzaSyALXisGgBIp3rGrpt9dI-4kS5CqyHlM1xo',

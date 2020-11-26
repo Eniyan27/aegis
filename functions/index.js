@@ -10,57 +10,24 @@ const functions = require('firebase-functions');
 
 // const t
 
-// const express = require('express');
-// const bodyParser = require('body-parser');
-// // const { functions } = require('firebase');
-// // const pino = require('express-pino-logger')();
-// const client = require('twilio')(
-//   'AC0be31c882934bdef820a2d24a3474009',
-//   '871a993fb3a2bdd7e08331fa0d3ee6f2',
-// );
-// const app = express();
-// app.use(bodyParser.urlencoded({extended: false}));
-// app.use(bodyParser.json());
-
-// app.post('/api/messages', (req, res) => {
-//   res.header('Content-Type', 'application/json');
-//   client.messages
-//     .create({
-//       from: 'whatsapp:+919952840983',
-//       to: 'whatsapp:+918015551146',
-//       body: '',
-//     })
-//     .then(() => res.send(JSON.stringify({success: true})))
-//     .catch((err) => {
-//       console.log(err);
-//       res.send(JSON.stringify({success: false}));
-//     });
-// });
-
 const client = require('twilio')(
   'AC0be31c882934bdef820a2d24a3474009',
   '871a993fb3a2bdd7e08331fa0d3ee6f2',
 );
-const sms = async (contacts) => {
+const sms = (contacts, {lat, lan}) => {
   const accountSid = 'AC0be31c882934bdef820a2d24a3474009';
   const authToken = '871a993fb3a2bdd7e08331fa0d3ee6f2';
-  // await fetch(
-  //   'https://api.twilio.com/2010-04-01/Accounts/AC0be31c882934bdef820a2d24a3474009/Messages.json',
-  //   {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   },
-  // );
-  client.messages
-    .create({
-      body: 'Hi there!',
-      from: 'whatsapp:+919952840983',
-      to: 'whatsapp:+918015551146',
-    })
+  Promise.all(
+    contacts.map((contact) =>
+      client.messages.create({
+        body: `I need your help ! And here is my location https://www.google.com/maps/search/?api=1&query=${lat},${lan} . Open maps to track me ! `,
+        from: 'whatsapp:+919952840983',
+        to: contact,
+      }),
+    ),
+  )
     .then((message) => console.log(message.sid))
     .catch((err) => console.log(err));
 };
 
-exports.widgets = functions.https.onRequest(sms);
+exports.widgets = functions.https.onCall(sms);
