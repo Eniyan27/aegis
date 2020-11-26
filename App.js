@@ -6,17 +6,16 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Provider} from 'react-redux';
+import Geolocation from 'react-native-geolocation-service';
+import {PermissionsAndroid} from 'react-native';
 import LoginPage from './src/components/LoginPage';
 import {store} from './src/redux';
 import firebase from 'firebase/app';
 import {ReactReduxFirebaseProvider} from 'react-redux-firebase';
 import {createFirestoreInstance} from 'redux-firestore';
-import {AppRegistry} from 'react-native';
-import Location from './src/components/Location';
-
-AppRegistry.registerHeadlessTask('Location', () => Location);
+import PERMISSIONS from 'react-native-permissions';
 
 export var firebaseConfig = {
   apiKey: 'AIzaSyALXisGgBIp3rGrpt9dI-4kS5CqyHlM1xo',
@@ -46,6 +45,23 @@ const rrfProps = {
 };
 
 const App = () => {
+  useEffect(() => {
+    async () => {
+      try {
+        const perm = await PermissionsAndroid.request(
+          PERMISSIONS.PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
+        );
+        if (perm === 'granted') {
+          Geolocation.getCurrentPosition(
+            (pos) => console.log(pos),
+            (err) => console.error(err),
+          );
+        }
+      } catch (error) {
+        console.warn(error);
+      }
+    };
+  });
   return (
     <>
       <Provider store={store}>
