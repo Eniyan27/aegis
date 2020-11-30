@@ -1,22 +1,51 @@
-import React, {useEffect} from 'react';
-import {View, Text, PermissionsAndroid} from 'react-native';
-import {PERMISSIONS} from 'react-native-permissions';
-import {BleManager} from 'react-native-ble-plx';
+import React, {useEffect, useState} from 'react';
+import {View, Text} from 'react-native';
+import {
+  BleManager,
+  Device,
+  Service,
+  Characteristic,
+} from 'react-native-ble-plx';
 
 const BLE = () => {
   const manager = new BleManager();
-  useEffect(() => {
-    try {
-      manager.enable().then((res) => console.log(res.devices));
-    } catch (error) {}
-  });
-  // function getAlldevices() {
-  //   manager.connectToDevice().then((res) => console.log(res));
-  // }
-  // getAlldevices();
+  const [device, setDevice] = useState([]);
+  const service = new Service();
+  const characteristic = new Characteristic();
+  console.log(characteristic.isReadable);
+  manager
+    .discoverAllServicesAndCharacteristicsForDevice(device.id)
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  function getAlldevices() {
+    const devices = [];
+    manager.startDeviceScan(null, null, (err, dev) => {
+      if (err) {
+        console.log(err);
+      } else {
+        devices.push(dev);
+        setDevice(devices);
+      }
+    });
+    setTimeout(() => {
+      manager.stopDeviceScan();
+    }, 2000);
+  }
+
+  const deviceID = getAlldevices();
+  console.log(deviceID);
   return (
     <View>
-      <Text></Text>
+      {device.map((dev) => (
+        <Text>
+          ID : {dev.id} Name:{dev.name}
+        </Text>
+      ))}
     </View>
   );
 };

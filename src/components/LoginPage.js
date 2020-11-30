@@ -15,6 +15,7 @@ import {hasContacts, updateContacts} from '../redux/actions';
 import {useSelector, useDispatch} from 'react-redux';
 import Allset from './Allset';
 import Location from './Location';
+import BLE from './BLE';
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,7 @@ function Login() {
   if (!isLoggedIn()) {
     return (
       <View style={styles.main}>
+        {/* <BLE /> */}
         <Button title="Aegis" onPress={() => Location.startService()} />
       </View>
     );
