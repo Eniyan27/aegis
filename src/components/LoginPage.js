@@ -25,7 +25,7 @@ function Login() {
   if (!isLoggedIn()) {
     return (
       <View style={styles.main}>
-        {/* <BLE /> */}
+        <BLE />
         <Button title="Aegis" onPress={() => Location.startService()} />
       </View>
     );

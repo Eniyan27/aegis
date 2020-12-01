@@ -40,7 +40,7 @@ const ChooseContacts = ({props, styles}) => {
     <View style={styles}>
       <Icon
         raised
-        name="contacts"
+        name="contact_phone"
         type="material"
         onPress={() => toggleVisible()}
       />

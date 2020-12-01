@@ -1,50 +1,37 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
-import {
-  BleManager,
-  Device,
-  Service,
-  Characteristic,
-} from 'react-native-ble-plx';
-
+import {ListItem} from 'react-native-elements';
+import BluetoothSerial from 'react-native-bluetooth-serial';
 const BLE = () => {
-  const manager = new BleManager();
   const [device, setDevice] = useState([]);
-  const service = new Service();
-  const characteristic = new Characteristic();
-  console.log(characteristic.isReadable);
-  manager
-    .discoverAllServicesAndCharacteristicsForDevice(device.id)
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
-  function getAlldevices() {
-    const devices = [];
-    manager.startDeviceScan(null, null, (err, dev) => {
-      if (err) {
-        console.log(err);
-      } else {
-        devices.push(dev);
-        setDevice(devices);
-      }
-    });
-    setTimeout(() => {
-      manager.stopDeviceScan();
-    }, 2000);
-  }
-
-  const deviceID = getAlldevices();
-  console.log(deviceID);
+  const [bstate, setBstate] = useState(false);
+  BluetoothSerial.list()
+    .then((res) => setDevice(res))
+    .catch((err) => console.error(err));
+  BluetoothSerial.isEnabled()
+    .then((res) => setBstate(res))
+    .catch((err) => console.error(err));
+  BluetoothSerial.discoverUnpairedDevices()
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err));
+  const readDevice = async () => {
+    const response = await BluetoothSerial.readFromDevice();
+    return response;
+  };
+  readDevice()
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err));
   return (
     <View>
+      {bstate ? (
+        <Text>Bluetooth is enabled</Text>
+      ) : (
+        <Text>Enable bluetooth to continue</Text>
+      )}
       {device.map((dev) => (
-        <Text>
-          ID : {dev.id} Name:{dev.name}
-        </Text>
+        <ListItem key={dev.id}>
+          <Text>{dev.name}</Text>
+        </ListItem>
       ))}
     </View>
   );
