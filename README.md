@@ -6,4 +6,10 @@ Aegis companion is an app for a revolutionary project. This project has been mad
 
 :pencil: Run `react-native run-android`
 
-:pencil: If emulator does'nt open. Open the emulator from the Android Studio or from your terminal and then run `react-native start` in your current working directory
+:pencil: If emulator doesn't open. Open the emulator from the Android Studio or from your terminal and then run `react-native start` in your current working directory
+
+### Todos
+
+- [ ] Add timer when notification is received
+- [ ] Press power button to cancel the invoked function 
+
