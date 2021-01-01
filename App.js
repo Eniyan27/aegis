@@ -15,7 +15,9 @@ import {store} from './src/redux';
 import firebase from 'firebase/app';
 import {ReactReduxFirebaseProvider} from 'react-redux-firebase';
 import {createFirestoreInstance} from 'redux-firestore';
+import SplashScreen from 'react-native-splash-screen';
 import PERMISSIONS from 'react-native-permissions';
+import PubNubReact from 'pubnub-react';
 
 export var firebaseConfig = {
   apiKey: 'AIzaSyALXisGgBIp3rGrpt9dI-4kS5CqyHlM1xo',

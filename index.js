@@ -40,7 +40,7 @@ const sendNotif = () => {
     timeoutAfter: null, // (optional) Specifies a duration in milliseconds after which this notification should be canceled, if it is not already canceled, default: null
     actions: ['Yes', 'No'], // (Android only) See the doc for notification actions to know more
     invokeApp: true, // (optional) This enable click on actions to bring back the application to foreground or stay in background, default: true
-    message: 'My Notification Message',
+    message: 'Signal received ! SMS will be sent in 30 seconds',
   });
 };
 

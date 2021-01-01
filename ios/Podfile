@@ -12,6 +12,12 @@ target 'aegisRN' do
 
   pod 'react-native-mapbox-gl', :path => '../node_modules/@react-native-mapbox-gl/maps'
 
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+
+  pod 'react-native-maps', :path => '../node_modules/react-native-maps'
+
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
   target 'aegisRNTests' do
     inherit! :complete
     # Pods for testing

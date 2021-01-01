@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Button, Text} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
+import {Button} from 'react-native-elements';
 import {
   GoogleSignin,
   GoogleSigninButton,
@@ -10,9 +11,7 @@ import {
   signOut,
   loggedIn,
 } from '../utils/helpers';
-import {LoginButton} from 'react-native-fbsdk';
 import {useNavigation} from '@react-navigation/native';
-
 function LoginComps() {
   const [user, setuser] = useState(null);
   const navigation = useNavigation();
@@ -23,7 +22,7 @@ function LoginComps() {
   return (
     <View style={styles.container}>
       <View style={styles.main}>
-        <LoginButton
+        <Button
           title="Login with Facebook"
           onPress={() =>
             loginWithFB()
@@ -32,9 +31,15 @@ function LoginComps() {
               })
               .catch((err) => console.log(err))
           }
+          icon={{
+            type: 'material',
+            name: 'facebook',
+          }}
         />
         <GoogleSigninButton
-          title="Login with Google"
+          style={styles.fb}
+          size={GoogleSigninButton.Size.Wide}
+          color={GoogleSigninButton.Color.Light}
           onPress={() =>
             loginWithGoogle()
               .then(() => {
@@ -50,17 +55,22 @@ function LoginComps() {
 
 const styles = StyleSheet.create({
   main: {
+    paddingTop: '80%',
     display: 'flex',
     flexDirection: 'column',
     flex: 1,
-    justifyContent: 'space-evenly',
     alignContent: 'center',
     alignItems: 'center',
-    zIndex: 1,
   },
   container: {
     width: '100%',
     height: '100%',
+  },
+  fb: {
+    marginTop: 10,
+    paddingTop: '13%',
+    width: 205,
+    height: 48,
   },
 });
 

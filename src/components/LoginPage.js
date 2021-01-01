@@ -1,66 +1,61 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {View, Text, StyleSheet, PermissionsAndroid} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  PermissionsAndroid,
+  ImageBackground,
+  Image,
+} from 'react-native';
 import {PERMISSIONS} from 'react-native-permissions';
 import {isLoggedIn} from '../utils/helpers';
 import LoginComps from './LoginComps';
 import Contacts from 'react-native-contacts';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
-import anim from '../assets/8222-success.json';
+import anim from '../assets/8659-success-tick.json';
 import {createStackNavigator} from '@react-navigation/stack';
 import LottieView from 'lottie-react-native';
-import {Avatar, Button, ListItem} from 'react-native-elements';
+import {Avatar, Button, ListItem, Text} from 'react-native-elements';
 import {ScrollView} from 'react-native-gesture-handler';
 import ChooseContacts from './ChooseContacts';
 import {hasContacts, updateContacts} from '../redux/actions';
 import {useSelector, useDispatch} from 'react-redux';
 import Allset from './Allset';
-import firebase from 'firebase/app';
-import Location from './Location';
-import PushNotification from 'react-native-push-notification';
-import BLE from './BLE';
+import Maps from './Maps';
+import LinearGradient from 'react-native-linear-gradient';
+import KeyEvent from 'react-native-keyevent';
 
 const Stack = createStackNavigator();
 // Components
 
 function Login() {
-  const sendNotif = () => {
-    console.log('Sending notif');
-    PushNotification.localNotification({
-      /* Android Only Properties */
-      channelId: 'AEGIS', // (required) channelId, if the channel doesn't exist, it will be created with options passed above (importance, vibration, sound). Once the channel is created, the channel will not be update. Make sure your channelId is different if you change these options. If you have created a custom channel, it will apply options of the channel.
-      ticker: 'My Notification Ticker', // (optional)
-      showWhen: true, // (optional) default: true
-      autoCancel: true, // (optional) default: true
-      largeIcon: 'ic_launcher', // (optional) default: "ic_launcher". Use "" for no large icon.
-      smallIcon: 'ic_notification', // (optional) default: "ic_notification" with fallback for "ic_launcher". Use "" for default small icon.
-      vibrate: true, // (optional) default: true
-      vibration: 300, // vibration length in milliseconds, ignored if vibrate=false, default: 1000
-      priority: 'high', // (optional) set notification priority, default: high
-      visibility: 'public', // (optional) set notification visibility, default: private
-      ignoreInForeground: false, // (optional) if true, the notification will not be visible when the app is in the foreground (useful for parity with how iOS notifications appear)
-      shortcutId: 'shortcut-id', // (optional) If this notification is duplicative of a Launcher shortcut, sets the id of the shortcut, in case the Launcher wants to hide the shortcut, default undefined
-      onlyAlertOnce: false, // (optional) alert will open only once with sound and notify, default: false
-      when: null, // (optional) Add a timestamp pertaining to the notification (usually the time the event occurred). For apps targeting Build.VERSION_CODES.N and above, this time is not shown anymore by default and must be opted into by using `showWhen`, default: null.
-      usesChronometer: true, // (optional) Show the `when` field as a stopwatch. Instead of presenting `when` as a timestamp, the notification will show an automatically updating display of the minutes and seconds since when. Useful when showing an elapsed time (like an ongoing phone call), default: false.
-      timeoutAfter: null, // (optional) Specifies a duration in milliseconds after which this notification should be canceled, if it is not already canceled, default: null
-      actions: ['Yes', 'No'], // (Android only) See the doc for notification actions to know more
-      invokeApp: true, // (optional) This enable click on actions to bring back the application to foreground or stay in background, default: true
-      message: 'My Notification Message',
+  useEffect(() => {
+    KeyEvent.onKeyDownListener((keyEvent) => {
+      console.log(`onKeyDown keyCode: ${keyEvent.keyCode}`);
+      console.log(`Action: ${keyEvent.action}`);
+      console.log(`Key: ${keyEvent.pressedKey}`);
     });
-  };
-  if (!isLoggedIn()) {
+  }, []);
+  if (isLoggedIn()) {
     return (
       <View style={styles.main}>
-        <BLE />
-        <Button title="Aegis" onPress={() => Location.startService()} />
-        <Button title="Send notif" onPress={() => sendNotif()} />
+        <Maps />
+        {/* <BLE /> */}
       </View>
     );
   } else {
     return (
       <View style={styles.container}>
-        <Text style={styles.heading}>Getting started</Text>
-        <LoginComps />
+        <ImageBackground
+          source={{
+            uri:
+              'https://firebasestorage.googleapis.com/v0/b/aegis-fbe56.appspot.com/o/bg.jpg?alt=media&token=092c36d0-4d7b-4c5e-94d3-484641f63beb',
+          }}
+          style={styles.image}>
+          <Text h1 style={styles.heading}>
+            Getting started
+          </Text>
+          <LoginComps />
+        </ImageBackground>
       </View>
     );
   }
@@ -68,18 +63,34 @@ function Login() {
 function Success() {
   const navigation = useNavigation();
   return (
-    <View>
-      <LottieView
-        source={anim}
-        loop={false}
-        autoPlay={true}
-        style={styles.success}
-      />
-      <Button
-        type="outline"
-        onPress={() => navigation.navigate('Choose contacts')}
-        title="Let's Go"
-      />
+    <View style={styles.container}>
+      <ImageBackground
+        source={{
+          uri:
+            'https://firebasestorage.googleapis.com/v0/b/aegis-fbe56.appspot.com/o/bg.jpg?alt=media&token=092c36d0-4d7b-4c5e-94d3-484641f63beb',
+        }}
+        style={styles.image}>
+        <LottieView
+          source={anim}
+          loop={false}
+          autoPlay={true}
+          style={styles.success}
+        />
+        <Text style={styles.successText}>
+          You are now successfully logged in !
+        </Text>
+        {/* <LinearGradient
+        colors={['#4c669f', '#3b5
+        998', '#192f6a']}
+        style={styles.linearGradient}>
+        <Text style={styles.buttonText}>Sign in with Facebook</Text>
+      </LinearGradient> */}
+        <Button
+          type="outline"
+          onPress={() => navigation.navigate('Choose contacts')}
+          title="Let's Go"
+        />
+      </ImageBackground>
     </View>
   );
 }
@@ -130,14 +141,24 @@ function ContactsChooser() {
         title: 'Contacts',
         message: 'This app would like to view your contacts.',
         buttonPositive: 'Please accept bare mortal',
-      }).then(() => {
-        Contacts.getAll().then((res) => {
-          const sortedData = res.sort(
-            (a, b) => a.displayName.toLowerCase() > b.displayName.toLowerCase(),
-          );
-          dispatch(hasContacts(sortedData));
-        });
-      });
+      })
+        .then(() => {
+          Contacts.getAll().then((res) => {
+            const sortedData = res.sort((a, b) => {
+              if (a === null) {
+                return 1;
+              } else if (b === null) {
+                return -1;
+              } else {
+                return a.displayName.toLowerCase() > b.displayName.toLowerCase()
+                  ? -1
+                  : 1;
+              }
+            });
+            dispatch(hasContacts(sortedData));
+          });
+        })
+        .catch((err) => console.log(err));
     } catch (error) {
       console.log(error);
     }
@@ -184,21 +205,19 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     fontSize: 40,
     color: 'rgba(255, 255, 255, 255)',
-    marginStart: 57,
+    paddingTop: 270,
     textAlign: 'center',
     justifyContent: 'center',
   },
   container: {
-    alignItems: 'flex-start',
-    paddingTop: 166,
+    flexDirection: 'column',
     flex: 1,
-    backgroundColor: '#423D3D',
   },
   success: {
     margin: 'auto',
     padding: 'auto',
-    width: 'auto',
-    height: 'auto',
+    width: '50%',
+    height: '50%',
     justifyContent: 'center',
     display: 'flex',
     alignContent: 'center',
@@ -222,6 +241,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     display: 'flex',
     alignContent: 'center',
+  },
+
+  image: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  },
+  linearGradient: {
+    flex: 1,
+    paddingLeft: 15,
+    paddingRight: 15,
+    borderRadius: 5,
+  },
+  buttonText: {
+    fontSize: 18,
+    fontFamily: 'Gill Sans',
+    textAlign: 'center',
+    margin: 10,
+    color: '#ffffff',
+    backgroundColor: 'transparent',
+  },
+  successText: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: '400',
   },
 });
 
