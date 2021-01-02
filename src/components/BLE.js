@@ -25,6 +25,8 @@ const BLE = () => {
     .then((res) => {
       if (res.includes('EMERGENCY')) {
         console.log('Signal recieved');
+      } else if (res.includes('Gyro data')) {
+        // Send to server
       } else {
         console.log(res);
       }

@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, StyleSheet, PermissionsAndroid} from 'react-native';
 import {Button} from 'react-native-elements';
 import {
   GoogleSignin,
@@ -12,6 +12,8 @@ import {
   loggedIn,
 } from '../utils/helpers';
 import {useNavigation} from '@react-navigation/native';
+import {PERMISSIONS} from 'react-native-permissions';
+
 function LoginComps() {
   const [user, setuser] = useState(null);
   const navigation = useNavigation();

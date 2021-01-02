@@ -23,6 +23,7 @@ import Allset from './Allset';
 import Maps from './Maps';
 import LinearGradient from 'react-native-linear-gradient';
 import KeyEvent from 'react-native-keyevent';
+import Timer from './Timer';
 
 const Stack = createStackNavigator();
 // Components
@@ -35,10 +36,11 @@ function Login() {
       console.log(`Key: ${keyEvent.pressedKey}`);
     });
   }, []);
-  if (isLoggedIn()) {
+  if (!isLoggedIn()) {
     return (
       <View style={styles.main}>
-        <Maps />
+        {/* <Maps /> */}
+        <Timer />
         {/* <BLE /> */}
       </View>
     );
@@ -63,19 +65,21 @@ function Login() {
 function Success() {
   const navigation = useNavigation();
   return (
-    <View style={styles.container}>
+    <View style={styles.successContainer}>
       <ImageBackground
         source={{
           uri:
-            'https://firebasestorage.googleapis.com/v0/b/aegis-fbe56.appspot.com/o/bg.jpg?alt=media&token=092c36d0-4d7b-4c5e-94d3-484641f63beb',
+            'https://firebasestorage.googleapis.com/v0/b/aegis-fbe56.appspot.com/o/undraw_order_confirmed_aaw7.png?alt=media&token=c2a89e5a-d98b-4c5a-8258-845bd862c0db',
         }}
-        style={styles.image}>
-        <LottieView
+        style={styles.successImage}
+        resizeMode="cover"
+        resizeMethod="resize">
+        {/* <LottieView
           source={anim}
           loop={false}
           autoPlay={true}
           style={styles.success}
-        />
+        /> */}
         <Text style={styles.successText}>
           You are now successfully logged in !
         </Text>
@@ -109,7 +113,7 @@ function ListContacts() {
           ) : (
             <Avatar
               rounded
-              title={contact.displayName[0]}
+              title={contact.displayName[0] ? contact.displayName[0] : 'A '}
               activeOpacity={0.7}
             />
           )}
@@ -143,16 +147,18 @@ function ContactsChooser() {
         buttonPositive: 'Please accept bare mortal',
       })
         .then(() => {
+          Contacts.deleteContact({recordID: '621'})
+            .then((record) => console.log(record))
+            .catch((err) => console.log(err));
           Contacts.getAll().then((res) => {
             const sortedData = res.sort((a, b) => {
-              if (a === null) {
-                return 1;
-              } else if (b === null) {
-                return -1;
-              } else {
-                return a.displayName.toLowerCase() > b.displayName.toLowerCase()
-                  ? -1
-                  : 1;
+              if (b.displayName === null) {
+                console.log(b);
+              }
+              if (a.displayName && b.displayName !== null) {
+                return (
+                  a.displayName.toLowerCase() > b.displayName.toLowerCase()
+                );
               }
             });
             dispatch(hasContacts(sortedData));
@@ -192,7 +198,11 @@ function LoginPage() {
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Choose contacts" component={ContactsChooser} />
-        <Stack.Screen name="Success" component={Success} />
+        <Stack.Screen
+          name="Success"
+          component={Success}
+          options={{cardStyle: {backgroundColor: '#FFFFFF'}}}
+        />
         <Stack.Screen name="Final Page" component={Allset} />
       </Stack.Navigator>
     </NavigationContainer>
@@ -209,6 +219,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     justifyContent: 'center',
   },
+  successContainer: {
+    flexDirection: 'column',
+    flex: 1,
+    backgroundColor: '#000000',
+  },
   container: {
     flexDirection: 'column',
     flex: 1,
@@ -216,11 +231,12 @@ const styles = StyleSheet.create({
   success: {
     margin: 'auto',
     padding: 'auto',
-    width: '50%',
-    height: '50%',
+    width: 'auto',
+    height: 'auto',
     justifyContent: 'center',
     display: 'flex',
     alignContent: 'center',
+    backgroundColor: '#FFFFFF',
   },
   badge: {
     // elevation: 2,
@@ -263,9 +279,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   successText: {
+    color: '#FFFFFF',
     textAlign: 'center',
     fontSize: 20,
     fontWeight: '400',
+  },
+  successImage: {
+    // flex: 1,
+    justifyContent: 'center',
+    width: undefined,
+    height: undefined,
+    aspectRatio: 1,
   },
 });
 
