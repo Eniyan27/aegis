@@ -25,30 +25,14 @@ const Timer = ({props}) => {
     };
   });
 
-  // Must be outside of any component LifeCycle (such as `componentDidMount`).
-  PushNotification.configure({
-    // (required) Called when a remote is received or opened, or local notification is opened
-    onNotification: function (notification) {
-      console.log('NOTIFICATION:', notification);
-    },
-    popInitialNotification: true,
-    requestPermissions: Platform.OS === 'android',
-  });
-
   const sendNotif = () => {
     console.log('Sending notif');
     PushNotification.localNotification({
-      /* Android Only Properties */
-      channelId: 'AEGIS', // (required) channelId, if the channel doesn't exist, it will be created with options passed above (importance, vibration, sound). Once the channel is created, the channel will not be update. Make sure your channelId is different if you change these options. If you have created a custom channel, it will apply options of the channel.
-      ticker: 'My Notification Ticker', // (optional)
       vibrate: true, // (optional) default: true
-      priority: 'max',
+      priority: 'high',
       vibration: 1000, // vibration length in milliseconds, ignored if vibrate=false, default: 1000
       actions: ['Yes', 'No'], // (Android only) See the doc for notification actions to know more
-      invokeApp: true, // (optional) This enable click on actions to bring back the application to foreground or stay in background, default: true
       message: 'Signal received ! SMS will be sent',
-      playSound: true,
-      soundName: 'default',
     });
   };
 
