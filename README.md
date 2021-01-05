@@ -11,6 +11,6 @@ Aegis companion is an app for a revolutionary project. This project has been mad
 ### Todos
 
 - [x] Add timer when notification is received.
-- [x] Press button to cancel the invoked function.
+- [x] Press button to cancel the invoked function(Power button press can be added if possible).
 - [ ] Enhance UI
 - [x] Fix bug when fetching contacts
