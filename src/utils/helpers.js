@@ -98,4 +98,18 @@ const signOut = () => {
     .catch((err) => console.error(err));
 };
 
-export {loginWithFB, loginWithGoogle, loggedIn, signOut, isLoggedIn};
+const notificationHandler = (notification, timer) => {
+  if (notification.action === 'Cancel') {
+    clearTimeout(timer);
+    console.log('Cancelled sending sms');
+  }
+};
+
+export {
+  loginWithFB,
+  loginWithGoogle,
+  loggedIn,
+  signOut,
+  isLoggedIn,
+  notificationHandler,
+};

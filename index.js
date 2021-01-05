@@ -7,11 +7,14 @@ import App from './App';
 import {name as appName} from './app.json';
 import BluetoothSerial from 'react-native-bluetooth-serial';
 import PushNotification from 'react-native-push-notification';
+import {notificationHandler} from './src/utils/helpers';
+import {timer} from './src/components/Timer';
 
 // Must be outside of any component LifeCycle (such as `componentDidMount`).
 PushNotification.configure({
   // (required) Called when a remote is received or opened, or local notification is opened
   onNotification: function (notification) {
+    notificationHandler(notification, timer);
     console.log('NOTIFICATION:', notification);
   },
   popInitialNotification: true,
@@ -47,7 +50,7 @@ const MyHeadlessTask = async () => {
   BluetoothSerial.readFromDevice()
     .then((res) => {
       if (res.length > 1) {
-        sendNotif();
+        // sendNotif();
         console.log('SMS sent');
       } else {
         console.log(res);
