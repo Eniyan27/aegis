@@ -9,7 +9,7 @@
 import React, {useEffect} from 'react';
 import {Provider} from 'react-redux';
 import Geolocation from 'react-native-geolocation-service';
-import {PermissionsAndroid} from 'react-native';
+import {PermissionsAndroid, useColorScheme} from 'react-native';
 import LoginPage from './src/components/LoginPage';
 import {store} from './src/redux';
 import firebase from 'firebase/app';
@@ -17,7 +17,7 @@ import {ReactReduxFirebaseProvider} from 'react-redux-firebase';
 import {createFirestoreInstance} from 'redux-firestore';
 import SplashScreen from 'react-native-splash-screen';
 import PERMISSIONS from 'react-native-permissions';
-import PubNubReact from 'pubnub-react';
+import Location from './src/components/Location';
 
 export var firebaseConfig = {
   apiKey: 'AIzaSyALXisGgBIp3rGrpt9dI-4kS5CqyHlM1xo',
@@ -48,6 +48,8 @@ const rrfProps = {
 
 const App = () => {
   useEffect(() => {
+    // Location.startService();
+    SplashScreen.hide();
     async () => {
       try {
         const perm = await PermissionsAndroid.request(

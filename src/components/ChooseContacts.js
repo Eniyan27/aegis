@@ -49,6 +49,7 @@ const ChooseContacts = ({props, styles}) => {
         isVisible={visible}
         onBackdropPress={() => toggleVisible()}
         overlayStyle={newStyles.modal}>
+        <Icon name="fact-check" type="material" size={50} />
         <Text h4 h4Style={newStyles.heading}>
           Chosen Contacts
         </Text>

@@ -38,7 +38,7 @@ const Maps = ({coordinates}) => {
     (position) => {
       const {latitude, longitude} = position.coords;
       const newCoordinate = {latitude, longitude};
-      setRoute(route.concat([newCoordinate]));
+      // setRoute(route.concat([newCoordinate]));
       // pubnub.publish(
       //   {
       //     message: {
@@ -79,11 +79,14 @@ const Maps = ({coordinates}) => {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
-  // pubnub.addListener({
-  //   message: function (m) {
-  //     console.log(m.message);
-  //   },
-  // });
+  pubnub.addListener({
+    message: function (m) {
+      const {latitude, longitude} = m;
+      const newCoordinate = {latitude, longitude};
+      setRoute(route.concat([newCoordinate]));
+      console.log(m.message);
+    },
+  });
 
   return (
     <View style={styles.page}>
@@ -98,7 +101,8 @@ const Maps = ({coordinates}) => {
           provider={PROVIDER_GOOGLE}
           showsUserLocation={true}
           followsUserLocation={true}
-          style={styles.map}>
+          style={styles.map}
+          showsTraffic={true}>
           <Polyline coordinates={route} />
           <Marker coordinate={getMapRegion()} />
         </MapView>

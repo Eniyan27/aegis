@@ -3,6 +3,8 @@ import {View, StyleSheet} from 'react-native';
 import {Button, Overlay, Text} from 'react-native-elements';
 import Location from './Location';
 import BluetoothSerial from 'react-native-bluetooth-serial';
+import {useDispatch} from 'react-redux';
+import {getBTpercent} from '../redux/actions';
 const BLE = () => {
   useEffect(() => {
     BluetoothSerial.isEnabled()
@@ -11,8 +13,14 @@ const BLE = () => {
   }, []);
   const [device, setDevice] = useState('');
   const [bstate, setBstate] = useState(false);
-
+  const dispatch = useDispatch();
   const macid = '45:54:13:04:09:B0';
+  BluetoothSerial.list()
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err));
+  BluetoothSerial.discoverUnpairedDevices()
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err));
   const connect = async (id) => {
     await BluetoothSerial.connect(id)
       .then((res) => {
@@ -21,19 +29,11 @@ const BLE = () => {
       })
       .catch((err) => console.log(err.message));
   };
-  BluetoothSerial.readFromDevice()
-    .then((res) => {
-      if (res.includes('EMERGENCY')) {
-        console.log('Signal recieved');
-      } else if (res.includes('Gyro data')) {
-        // Send to server
-      } else {
-        console.log(res);
-      }
-      // console.log(res);
-    })
-    .catch((err) => console.log(err));
+
   console.log(bstate);
+  BluetoothSerial.list()
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err));
   return (
     <View>
       {bstate ? (

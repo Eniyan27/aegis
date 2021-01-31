@@ -2,13 +2,15 @@
  * @format
  */
 
-import {AppRegistry, Platform} from 'react-native';
+import {AppRegistry} from 'react-native';
 import App from './App';
 import {name as appName} from './app.json';
 import BluetoothSerial from 'react-native-bluetooth-serial';
 import PushNotification from 'react-native-push-notification';
 import {notificationHandler} from './src/utils/helpers';
 import {timer} from './src/components/Timer';
+import {getBTpercent} from './src/redux/actions';
+import {store} from './src/redux';
 
 // Must be outside of any component LifeCycle (such as `componentDidMount`).
 PushNotification.configure({
@@ -49,12 +51,32 @@ PushNotification.configure({
 const MyHeadlessTask = async () => {
   BluetoothSerial.readFromDevice()
     .then((res) => {
-      if (res.length > 1) {
+      if (res.includes('EMERGENCY')) {
         // sendNotif();
+        PushNotification.localNotification({
+          channelId: 'AEGIS',
+          vibrate: true, // (optional) default: true
+          priority: 'high',
+          ticker: 'Tick tick tick',
+          playSound: true,
+          importance: 'high',
+          soundName: 'default',
+          visibility: 'public',
+          vibration: 1000, // vibration length in milliseconds, ignored if vibrate=false, default: 1000
+          actions: ['Cancel'], // (Android only) See the doc for notification actions to know more
+          message: 'Signal received ! SMS will be sent',
+          showWhen: true,
+          when: Date.now(),
+          timeoutAfter: 30000,
+          usesChronometer: true, // (optional) Show the `when` field as a stopwatch. Instead of presenting `when` as a timestamp, the notification will show an automatically updating display of the minutes and seconds since when. Useful when showing an elapsed time (like an ongoing phone call), default: false.
+        });
         console.log('SMS sent');
+      } else if (res == parseInt(res)) {
+        store.dispatch(getBTpercent(res));
       } else {
         console.log(res);
       }
+      console.log(res);
     })
     .catch((err) => console.log(err));
 };

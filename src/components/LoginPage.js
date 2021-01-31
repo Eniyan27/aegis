@@ -4,14 +4,13 @@ import {
   StyleSheet,
   PermissionsAndroid,
   ImageBackground,
-  Image,
+  useColorScheme,
 } from 'react-native';
 import {PERMISSIONS} from 'react-native-permissions';
 import {isLoggedIn} from '../utils/helpers';
 import LoginComps from './LoginComps';
 import Contacts from 'react-native-contacts';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
-import anim from '../assets/8659-success-tick.json';
 import {createStackNavigator} from '@react-navigation/stack';
 import LottieView from 'lottie-react-native';
 import {Avatar, Button, ListItem, Text} from 'react-native-elements';
@@ -21,14 +20,16 @@ import {hasContacts, updateContacts} from '../redux/actions';
 import {useSelector, useDispatch} from 'react-redux';
 import Allset from './Allset';
 import Maps from './Maps';
-import LinearGradient from 'react-native-linear-gradient';
 import KeyEvent from 'react-native-keyevent';
-import Timer from './Timer';
+import Home from './Home';
+import Profile from './Profile';
+import BLE from './BLE';
 
 const Stack = createStackNavigator();
 // Components
 
 function Login() {
+  const colorScheme = useColorScheme();
   useEffect(() => {
     KeyEvent.onKeyDownListener((keyEvent) => {
       console.log(`onKeyDown keyCode: ${keyEvent.keyCode}`);
@@ -39,9 +40,8 @@ function Login() {
   if (!isLoggedIn()) {
     return (
       <View style={styles.main}>
-        {/* <Maps /> */}
-        <Timer />
-        {/* <BLE /> */}
+        {/* <Profile /> */}
+        <Home />
       </View>
     );
   } else {
@@ -69,31 +69,21 @@ function Success() {
       <ImageBackground
         source={{
           uri:
-            'https://firebasestorage.googleapis.com/v0/b/aegis-fbe56.appspot.com/o/undraw_order_confirmed_aaw7.png?alt=media&token=c2a89e5a-d98b-4c5a-8258-845bd862c0db',
+            'https://firebasestorage.googleapis.com/v0/b/aegis-fbe56.appspot.com/o/success-png.png?alt=media&token=1707fa0f-1546-45c7-b624-c31018bfef3b',
         }}
         style={styles.successImage}
         resizeMode="cover"
         resizeMethod="resize">
-        {/* <LottieView
-          source={anim}
-          loop={false}
-          autoPlay={true}
-          style={styles.success}
-        /> */}
-        <Text style={styles.successText}>
-          You are now successfully logged in !
-        </Text>
-        {/* <LinearGradient
-        colors={['#4c669f', '#3b5
-        998', '#192f6a']}
-        style={styles.linearGradient}>
-        <Text style={styles.buttonText}>Sign in with Facebook</Text>
-      </LinearGradient> */}
-        <Button
-          type="outline"
-          onPress={() => navigation.navigate('Choose contacts')}
-          title="Let's Go"
-        />
+        <View style={{paddingTop: '60%'}}>
+          <Text style={styles.successText}>
+            You are now successfully logged in !
+          </Text>
+          <Button
+            type="outline"
+            onPress={() => navigation.navigate('Choose contacts')}
+            title="Let's Go"
+          />
+        </View>
       </ImageBackground>
     </View>
   );
@@ -204,6 +194,9 @@ function LoginPage() {
           options={{cardStyle: {backgroundColor: '#FFFFFF'}}}
         />
         <Stack.Screen name="Final Page" component={Allset} />
+        <Stack.Screen name="Maps" component={Maps} />
+        <Stack.Screen name="Edit Profile" component={Profile} />
+        <Stack.Screen name="BLE" component={BLE} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -220,6 +213,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   successContainer: {
+    color: 'black',
     flexDirection: 'column',
     flex: 1,
     backgroundColor: '#000000',
@@ -279,17 +273,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   successText: {
-    color: '#FFFFFF',
+    color: 'black',
     textAlign: 'center',
     fontSize: 20,
     fontWeight: '400',
   },
   successImage: {
-    // flex: 1,
+    flex: 1,
     justifyContent: 'center',
-    width: undefined,
-    height: undefined,
-    aspectRatio: 1,
+    // width: undefined,
+    // height: undefined,
+    // aspectRatio: 1,
   },
 });
 

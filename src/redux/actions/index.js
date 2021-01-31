@@ -4,6 +4,7 @@ import {
   SET_CONTACTS,
   DELETE_CONTACT,
   UPDATE_CONTACTS,
+  BATTERY_PERCENTAGE,
 } from '../types';
 
 export const loggedIN = (uid) => {
@@ -42,5 +43,12 @@ export const deleteContact = (contact) => {
   return {
     type: DELETE_CONTACT,
     payload: contact,
+  };
+};
+
+export const getBTpercent = (percentage) => {
+  return {
+    type: BATTERY_PERCENTAGE,
+    payload: percentage,
   };
 };

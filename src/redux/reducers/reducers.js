@@ -1,10 +1,17 @@
-import {CONTACTS, DELETE_CONTACT, LOGGED_IN, SET_CONTACTS} from '../types';
+import {
+  BATTERY_PERCENTAGE,
+  CONTACTS,
+  DELETE_CONTACT,
+  LOGGED_IN,
+  SET_CONTACTS,
+} from '../types';
 // import {initialState} from '../index'
 
 const initState = {
   isLoggedIN: false,
   contacts: [],
   chosenContacts: [],
+  batteryPercentage: 95,
 };
 
 export const user = (state = initState, action) => {
@@ -27,6 +34,11 @@ export const user = (state = initState, action) => {
         chosenContacts: state.chosenContacts.filter(
           (contact) => contact !== action.payload,
         ),
+      };
+    case BATTERY_PERCENTAGE:
+      return {
+        ...state,
+        batteryPercentage: action.payload,
       };
     default:
       return state;

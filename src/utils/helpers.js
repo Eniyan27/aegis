@@ -6,6 +6,7 @@ import {LoginManager, AccessToken} from 'react-native-fbsdk';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import {getContactsMatchingString} from 'react-native-contacts';
 import {useFirestore} from 'react-redux-firebase';
+import _ from 'lodash';
 async function loginWithFB() {
   // Attempt login with permissions
   const result = await LoginManager.logInWithPermissions([
@@ -66,10 +67,7 @@ const loggedIn = () => {
   var user = firebase.auth().currentUser;
   if (user) {
     console.log(`The user : ${user}`);
-    return {
-      user: user.displayName,
-      uid: user.uid,
-    };
+    return user;
   } else {
     return null;
   }
@@ -105,6 +103,23 @@ const notificationHandler = (notification, timer) => {
   }
 };
 
+const fetchedContacts = async (uid) => {
+  var contacts;
+  await firestore()
+    .collection('users')
+    .doc(uid)
+    .get()
+    .then((col) => {
+      contacts = col.data().contacts;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  return _.flatten(contacts);
+};
+
+fetchedContacts('zrAgJEYRsiVAHMtpKMklWam6Cfw1');
+
 export {
   loginWithFB,
   loginWithGoogle,
@@ -112,4 +127,5 @@ export {
   signOut,
   isLoggedIn,
   notificationHandler,
+  fetchedContacts,
 };
