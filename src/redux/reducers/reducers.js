@@ -11,7 +11,7 @@ const initState = {
   isLoggedIN: false,
   contacts: [],
   chosenContacts: [],
-  batteryPercentage: 95,
+  batteryPercentage: 0,
 };
 
 export const user = (state = initState, action) => {

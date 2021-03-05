@@ -72,6 +72,7 @@ const MyHeadlessTask = async () => {
         });
         console.log('SMS sent');
       } else if (res == parseInt(res)) {
+        console.log(res);
         store.dispatch(getBTpercent(res));
       } else {
         console.log(res);
